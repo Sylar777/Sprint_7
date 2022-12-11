@@ -3,13 +3,10 @@ package com.yandex.practicum;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
@@ -30,7 +27,6 @@ public class OrderCreationTest {
                     colorJSON += "\", \"";
                 }
             }
-        System.out.println("colorJSON = " + colorJSON);
         }
 
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
@@ -47,21 +43,15 @@ public class OrderCreationTest {
     
     @Test
     public void colorParametrTest(){
-        System.out.println(color);
         String json = "{\"firstName\": \"Naruto\", \"lastName\": \"Uchiha\", \"address\": \"Konoha, 142 apt.\", \"metroStation\": 4, \"phone\": \"+7 800 355 35 35\", \"rentTime\": 5, \"deliveryDate\": \"2020-06-06\", \"comment\": \"Saske, come back to Konoha\", \"color\": [ \"" + colorJSON + "\" ]}";
         assertEquals(true, true);
 
-        Response response =
             given()
             .header("Content-type", "application/json")
             .and()
             .body(json)
             .when()
-            .post("/api/v1/orders");
-
-        System.out.println("response = " + response.asString());
-
-        response
+            .post("/api/v1/orders")
             .then()
             .assertThat()
             .body("track", notNullValue())
