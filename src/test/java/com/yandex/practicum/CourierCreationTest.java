@@ -20,7 +20,7 @@ public class CourierCreationTest {
     }
     
     @Test
-    public void courierCanBeCreated(){
+    public void courierCanBeCreatedTest(){
         String json = "{\"login\":\"" + login + "\", \"password\": \"14243\", \"firstName\": \"saske\" }";
         // System.out.println("json = " + json);
 
@@ -44,7 +44,7 @@ public class CourierCreationTest {
 
 
     @Test
-    public void canBeCreatedTheSameCourier(){
+    public void canBeCreatedTheSameCourierTest(){
         String json = "{\"login\":\"" + login + "\", \"password\": \"14243\", \"firstName\": \"saske\" }";
         // System.out.println("json = " + json);
 
@@ -74,7 +74,7 @@ public class CourierCreationTest {
     }
 
     @Test
-    public void allRequiredFieldsMustBePopulatedThroughCreatingCourier(){
+    public void allRequiredFieldsMustBePopulatedThroughCreatingCourierTest(){
         String json = "{\"login\":\"" + login + "\", \"firstName\": \"saske\" }";
         // System.out.println("json = " + json);
 

@@ -14,7 +14,7 @@ public class CourierLoginTest {
     }
     
     @Test
-    public void courierCanBeLogin(){
+    public void courierCanBeLoginTest(){
         String json = "{\"login\": \"testDan3\", \"password\": \"14243\"}";
 
         Response response =
@@ -36,7 +36,7 @@ public class CourierLoginTest {
     }
 
     @Test
-    public void courierCantBeLoginWOAllFields(){
+    public void courierCantBeLoginWOAllFieldsTest(){
         String json = "{\"password\": \"14243\"}";
 
         Response response =
@@ -55,7 +55,7 @@ public class CourierLoginTest {
     }
 
     @Test
-    public void courierWrongPassword(){
+    public void courierWrongPasswordTest(){
         String json = "{\"login\": \"testDan3\", \"password\": \"14$243\"}";
 
         Response response =
@@ -78,10 +78,10 @@ public class CourierLoginTest {
      * 
      * Проверь:
             + курьер может авторизоваться;
-            для авторизации нужно передать все обязательные поля;
-            система вернёт ошибку, если неправильно указать логин или пароль;
-            если какого-то поля нет, запрос возвращает ошибку;
-            если авторизоваться под несуществующим пользователем, запрос возвращает ошибку;
+            + для авторизации нужно передать все обязательные поля;
+            + система вернёт ошибку, если неправильно указать логин или пароль;
+            + если какого-то поля нет, запрос возвращает ошибку;
+            + если авторизоваться под несуществующим пользователем, запрос возвращает ошибку;
             + успешный запрос возвращает id.
      */
 }
