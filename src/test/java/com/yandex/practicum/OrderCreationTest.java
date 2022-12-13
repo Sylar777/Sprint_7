@@ -7,17 +7,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
+
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 @RunWith(Parameterized.class)
 public class OrderCreationTest {
     
-    private List<String> color;
     private String colorJSON = "";
 
     public OrderCreationTest(List<String> color){
-        this.color=color;
 
         if(!color.isEmpty()){
             for(int i=0; i< color.size(); i++ ){
@@ -46,12 +46,14 @@ public class OrderCreationTest {
         String json = "{\"firstName\": \"Naruto\", \"lastName\": \"Uchiha\", \"address\": \"Konoha, 142 apt.\", \"metroStation\": 4, \"phone\": \"+7 800 355 35 35\", \"rentTime\": 5, \"deliveryDate\": \"2020-06-06\", \"comment\": \"Saske, come back to Konoha\", \"color\": [ \"" + colorJSON + "\" ]}";
         assertEquals(true, true);
 
-            given()
+        Response response = given()
             .header("Content-type", "application/json")
             .and()
             .body(json)
             .when()
-            .post("/api/v1/orders")
+            .post("/api/v1/orders");
+
+        response
             .then()
             .assertThat()
             .body("track", notNullValue())

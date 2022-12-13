@@ -6,16 +6,38 @@ import io.restassured.RestAssured;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
+import java.util.Random;
+
 public class CourierLoginTest {
     
+    private String login;
+    private final String PASSWORD = "14243";
+
     @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+
+        login = "testDan" + new Random().nextInt(10000);
+
+        String json = "{\"login\":\"" + login + "\", \"password\": \"" + PASSWORD + "\", \"firstName\": \"saske\" }";
+
+        given()
+            .header("Content-type", "application/json")
+            .and()
+            .body(json)
+            .when()
+            .post("/api/v1/courier")
+            .then()
+            .assertThat()
+            .body("ok", equalTo(true))
+            .and()
+            .statusCode(201);
+
     }
     
     @Test
     public void courierCanBeLoginTest(){
-        String json = "{\"login\": \"testDan3\", \"password\": \"14243\"}";
+        String json = "{\"login\": \"" + login + "\", \"password\": \"" + PASSWORD + "\"}";
 
             given()
             .header("Content-type", "application/json")
@@ -32,7 +54,7 @@ public class CourierLoginTest {
 
     @Test
     public void courierCantBeLoginWOAllFieldsTest(){
-        String json = "{\"password\": \"14243\"}";
+        String json = "{\"password\": \"" + PASSWORD + "\"}";
 
             given()
             .header("Content-type", "application/json")
@@ -46,7 +68,7 @@ public class CourierLoginTest {
 
     @Test
     public void courierWrongPasswordTest(){
-        String json = "{\"login\": \"testDan3\", \"password\": \"14$243\"}";
+        String json = "{\"login\": \"" + login + "\", \"password\": \"test\"}";
 
             given()
             .header("Content-type", "application/json")
