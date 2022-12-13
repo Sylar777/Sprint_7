@@ -6,6 +6,10 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
@@ -42,7 +46,10 @@ public class OrderCreationTest {
     }
     
     @Test
-    public void colorParametrTest(){
+    @DisplayName("Check that Order can created with different Color parameters")
+    @Description("Check that Order can created with different Color parameters")
+    @Step("Send POST request to create Order with Color")
+    public void colorParameterTest(){
         String json = "{\"firstName\": \"Naruto\", \"lastName\": \"Uchiha\", \"address\": \"Konoha, 142 apt.\", \"metroStation\": 4, \"phone\": \"+7 800 355 35 35\", \"rentTime\": 5, \"deliveryDate\": \"2020-06-06\", \"comment\": \"Saske, come back to Konoha\", \"color\": [ \"" + colorJSON + "\" ]}";
         assertEquals(true, true);
 

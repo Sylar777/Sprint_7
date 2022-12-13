@@ -2,6 +2,10 @@ package com.yandex.practicum;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -36,7 +40,10 @@ public class CourierLoginTest {
     }
     
     @Test
-    public void courierCanBeLoginTest(){
+    @DisplayName("Check that courier can login")
+    @Description("Check that courier can login")
+    @Step("Send POST request to login courier")
+    public void courierCanLoginTest(){
         String json = "{\"login\": \"" + login + "\", \"password\": \"" + PASSWORD + "\"}";
 
             given()
@@ -53,6 +60,9 @@ public class CourierLoginTest {
     }
 
     @Test
+    @DisplayName("Check that courier can't login w/o all required fields")
+    @Description("Check that if some required fields are missed then courier can't login")
+    @Step("Send POST request to login courier w/o all required fields")
     public void courierCantBeLoginWOAllFieldsTest(){
         String json = "{\"password\": \"" + PASSWORD + "\"}";
 
@@ -67,6 +77,9 @@ public class CourierLoginTest {
     }
 
     @Test
+    @DisplayName("Check that courier can't login with wrong password")
+    @Description("Check that courier can't login with wrong password")
+    @Step("Send POST request to login courier with wrong password")
     public void courierWrongPasswordTest(){
         String json = "{\"login\": \"" + login + "\", \"password\": \"test\"}";
 
