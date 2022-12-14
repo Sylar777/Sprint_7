@@ -1,5 +1,6 @@
 package com.yandex.practicum;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import io.restassured.RestAssured;
@@ -14,13 +15,41 @@ import java.util.Random;
 public class CourierCreationTest {
 
     private String login;
-    private Response response;
+    private Response responseOfCourierCreation;
     private final String PASSWORD = "14243";
 
     @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
         login = "testDan" + new Random().nextInt(10000);
+    }
+
+    @After
+    public void clear(){
+
+        String loginJSON = "{\"login\":\"" + login + "\", \"password\": \"" + PASSWORD + "\" }";
+
+        Response responseOfLogin = given()
+            .header("Content-type", "application/json")
+            .and()
+            .body(loginJSON)
+            .when()
+            .post("/api/v1/courier/login");
+        
+            if(!responseOfLogin.asString().contains("Учетная запись не найдена")){
+                String id = responseOfLogin.asString().substring(6, 12);
+                String deletionJSON = "{\"id\":\"" + id + "\" }";
+                String deletionRequestLink = "/api/v1/courier/" + id;
+
+                given()
+                    .header("Content-type", "application/json")
+                    .and()
+                    .body(deletionJSON)
+                    .when()
+                    .delete(deletionRequestLink)
+                    .then()
+                    .statusCode(200);
+            }
     }
 
     @Test
@@ -30,14 +59,14 @@ public class CourierCreationTest {
     public void courierCanBeCreatedTest(){
         String json = "{\"login\":\"" + login + "\", \"password\": \"" + PASSWORD + "\", \"firstName\": \"saske\" }";
 
-        response = given()
+        responseOfCourierCreation = given()
             .header("Content-type", "application/json")
             .and()
             .body(json)
             .when()
             .post("/api/v1/courier");
 
-        response
+        responseOfCourierCreation
             .then()
             .assertThat()
             .body("ok", equalTo(true))
@@ -53,18 +82,18 @@ public class CourierCreationTest {
     public void cantBeCreatedTheSameCourierTest(){
         String json = "{\"login\":\"" + login + "\", \"password\": \"" + PASSWORD + "\", \"firstName\": \"saske\" }";
 
-        response = given()
+        responseOfCourierCreation = given()
             .header("Content-type", "application/json")
             .and()
             .body(json)
             .when()
             .post("/api/v1/courier");
 
-        response
+        responseOfCourierCreation
             .then()
             .statusCode(201);
 
-        Response response2 =
+        Response responseOfCourierCreation2 =
             given()
             .header("Content-type", "application/json")
             .and()
@@ -72,10 +101,9 @@ public class CourierCreationTest {
             .when()
             .post("/api/v1/courier");
 
-        response2
+        responseOfCourierCreation2
             .then()
             .statusCode(409);
-
     }
 
     @Test
@@ -85,7 +113,7 @@ public class CourierCreationTest {
     public void allRequiredFieldsMustBePopulatedThroughCreatingCourierTest(){
         String json = "{\"login\":\"" + login + "\", \"firstName\": \"saske\" }";
 
-        response =
+        responseOfCourierCreation =
             given()
             .header("Content-type", "application/json")
             .and()
@@ -93,7 +121,7 @@ public class CourierCreationTest {
             .when()
             .post("/api/v1/courier");
 
-        response
+        responseOfCourierCreation
             .then()
             .statusCode(400);
     }

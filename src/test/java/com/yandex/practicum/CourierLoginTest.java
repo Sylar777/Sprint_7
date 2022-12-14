@@ -1,5 +1,6 @@
 package com.yandex.practicum;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,6 +8,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
+
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
@@ -36,7 +39,41 @@ public class CourierLoginTest {
             .body("ok", equalTo(true))
             .and()
             .statusCode(201);
+    }
 
+
+
+    @After
+    public void clear(){
+
+        String loginJSON = "{\"login\":\"" + login + "\", \"password\": \"" + PASSWORD + "\" }";
+
+        Response responseOfLogin = given()
+            .header("Content-type", "application/json")
+            .and()
+            .body(loginJSON)
+            .when()
+            .post("/api/v1/courier/login");
+        
+        responseOfLogin
+            .then()
+            .assertThat()
+            .body("id", notNullValue())
+            .and()
+            .statusCode(200);
+        
+        String id = responseOfLogin.asString().substring(6, 12);
+        String deletionJSON = "{\"id\":\"" + id + "\" }";
+        String deletionRequestLink = "/api/v1/courier/" + id;
+
+        given()
+            .header("Content-type", "application/json")
+            .and()
+            .body(deletionJSON)
+            .when()
+            .delete(deletionRequestLink)
+            .then()
+            .statusCode(200);
     }
     
     @Test
